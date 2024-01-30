@@ -10,12 +10,13 @@ import (
 
 // Injection points for backward compatibility.
 // If you need to keep your JSON marshal/unmarshal way, overwrite them like below.
-//   money.UnmarshalJSON = func (m *Money, b []byte) error { ... }
-//   money.MarshalJSON = func (m Money) ([]byte, error) { ... }
+//
+//	money.UnmarshalJSON = func (m *Money, b []byte) error { ... }
+//	money.MarshalJSON = func (m Money) ([]byte, error) { ... }
 var (
-	// UnmarshalJSON is injection point of json.Unmarshaller for money.Money
+	// UnmarshalJSON is the injection point of json.Unmarshal for money.Money
 	UnmarshalJSON = defaultUnmarshalJSON
-	// MarshalJSON is injection point of json.Marshaller for money.Money
+	// MarshalJSON is injection point of json.Marshal for money.Money
 	MarshalJSON = defaultMarshalJSON
 
 	// ErrCurrencyMismatch happens when two compared Money don't have the same currency.
@@ -220,7 +221,7 @@ func (m *Money) Multiply(mul int64) *Money {
 	return &Money{amount: mutate.calc.multiply(m.amount, mul), currency: m.currency}
 }
 
-// Round returns new Money struct with value rounded to nearest zero.
+// Round returns new Money struct with value rounded to the nearest zero.
 func (m *Money) Round() *Money {
 	return &Money{amount: mutate.calc.round(m.amount, m.currency.Fraction), currency: m.currency}
 }
@@ -242,8 +243,8 @@ func (m *Money) Split(n int) ([]*Money, error) {
 
 	r := mutate.calc.modulus(m.amount, int64(n))
 	l := mutate.calc.absolute(r)
-	// Add leftovers to the first parties.
 
+	// Add leftovers to the first parties.
 	v := int64(1)
 	if m.amount < 0 {
 		v = -1
@@ -252,7 +253,6 @@ func (m *Money) Split(n int) ([]*Money, error) {
 		ms[p].amount = mutate.calc.add(ms[p].amount, v)
 		l--
 	}
-
 	return ms, nil
 }
 
@@ -318,20 +318,22 @@ func (m *Money) AsMajorUnits() float64 {
 	return c.Formatter().ToMajorUnits(m.amount)
 }
 
-// UnmarshalJSON is implementation of json.Unmarshaller
+// UnmarshalJSON is an implementation of json.Unmarshal
 func (m *Money) UnmarshalJSON(b []byte) error {
 	return UnmarshalJSON(m, b)
 }
 
-// MarshalJSON is implementation of json.Marshaller
-func (m Money) MarshalJSON() ([]byte, error) {
-	return MarshalJSON(m)
+// MarshalJSON is the implementation of json.Marshal
+func (m *Money) MarshalJSON() ([]byte, error) {
+	return MarshalJSON(*m)
 }
 
 // Compare function compares two money of the same type
-//  if m.amount > om.amount returns (1, nil)
-//  if m.amount == om.amount returns (0, nil
-//  if m.amount < om.amount returns (-1, nil)
+//
+//	if m.amount > om.amount returns (1, nil)
+//	if m.amount == om.amount returns (0, nil
+//	if m.amount < om.amount returns (-1, nil)
+//
 // If compare moneys from distinct currency, return (m.amount, ErrCurrencyMismatch)
 func (m *Money) Compare(om *Money) (int, error) {
 	if err := m.assertSameCurrency(om); err != nil {

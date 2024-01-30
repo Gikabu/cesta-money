@@ -176,3 +176,12 @@ const (
 	ZWD = "ZWD"
 	ZWL = "ZWL"
 )
+
+// CEN - Custom Addition
+const (
+	CEN = "CEN"
+)
+
+const (
+	CentiGrapheme = "￠"
+)

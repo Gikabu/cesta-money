@@ -219,6 +219,8 @@ var currencies = Currencies{
 	ZMW: {Decimal: ".", Thousand: ",", Code: ZMW, Fraction: 2, NumericCode: "967", Grapheme: "ZK", Template: "$1"},
 	ZWD: {Decimal: ".", Thousand: ",", Code: ZWD, Fraction: 2, NumericCode: "716", Grapheme: "Z$", Template: "$1"},
 	ZWL: {Decimal: ".", Thousand: ",", Code: ZWL, Fraction: 2, NumericCode: "932", Grapheme: "Z$", Template: "$1"},
+
+	CEN: {Decimal: ".", Thousand: ",", Code: CEN, Fraction: 2, Grapheme: CentiGrapheme, Template: "$1"},
 }
 
 // AddCurrency lets you insert or update currency in currencies list.
