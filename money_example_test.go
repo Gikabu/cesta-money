@@ -2,9 +2,8 @@ package money_test
 
 import (
 	"fmt"
+	money "github.com/Gikabu/cesta-money"
 	"log"
-
-	"github.com/Rhymond/go-money"
 )
 
 func ExampleMoney() {
